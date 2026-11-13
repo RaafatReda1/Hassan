@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>شبكة أخبار الجنيدي - تجربة محرك بحث جوجل</title>
+  <meta name="description" content="نموذج احترافي لعرض تصدر الأخبار في نتائج بحث جوجل الأولى بدقة كاملة وسهولة للمستخدم.">
+
+  <!-- Google Fonts: Cairo & Alexandria for Modern Elegant Arabic, Roboto for Google UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="google-dark-theme">
+
+  <!-- ========================================================================= -->
+  <!-- COLLAPSIBLE FLOATING HEADER (Reveals smoothly on Hover or Click)           -->
+  <!-- ========================================================================= -->
+  <div class="floating-header-wrapper" id="floating-header-wrapper">
+    <!-- Discreet Toggle Pill (Visible by default) -->
+    <div class="floating-pill-trigger" id="header-trigger-btn" onclick="toggleHeaderCollapse()">
+      <span class="pill-dot"></span>
+      <span class="pill-label">✦ التنقل السريع بين الشاشات</span>
+      <span class="pill-chevron" id="header-chevron">▼</span>
+    </div>
+
+    <!-- Collapsible Bar Content -->
+    <nav class="collapsible-nav-bar" id="collapsible-nav-bar">
+      <div class="nav-bar-inner">
+        
+        <div class="brand-info">
+          <span class="brand-title">منصة الأخبار ومحاكي جوجل</span>
+          <span class="brand-badge">إصدار العميل التجريبي</span>
+        </div>
+
+        <!-- 3 Primary Navigation Buttons -->
+        <div class="nav-buttons-group">
+          <button type="button" class="nav-action-btn active" id="btn-tab-google" onclick="switchMainTab('google')">
+            <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>1. بحث جوجل الحقيقي (SERP)</span>
+            <span class="rank-tag">المركز #1</span>
+          </button>
+
+          <button type="button" class="nav-action-btn" id="btn-tab-news" onclick="switchMainTab('news')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+              <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+            </svg>
+            <span>2. موقع الأخبار (عرض القراء)</span>
+          </button>
+
+          <button type="button" class="nav-action-btn" id="btn-tab-admin" onclick="switchMainTab('admin')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <span>3. لوحة تحكم الأدمن (نشر خبر)</span>
+            <span class="count-bubble" id="topbar-news-count">3</span>
+          </button>
+        </div>
+
+        <!-- Extra Quick Controls -->
+        <div class="nav-extra-tools">
+          <button type="button" class="tool-btn" id="btn-google-theme-toggle" onclick="toggleGoogleTheme()" title="تبديل مظهر جوجل (ليلي / نهاري)">
+            <span id="theme-toggle-icon">☀️ المظهر النهاري</span>
+          </button>
+          <button type="button" class="tool-btn close-bar-btn" onclick="collapseHeader()" title="إخفاء هذا الشريط">
+            <span>▲ إخفاء الشريط</span>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </div>
+
+  <!-- Animated Notification Toast -->
+  <div id="app-toast" class="app-toast"></div>
+
+
+  <!-- ========================================================================= -->
+  <!-- TAB 1: FORMAL REAL GOOGLE SEARCH ENGINE (DARK / LIGHT THEME)              -->
+  <!-- ========================================================================= -->
+  <section id="tab-google" class="main-tab-view active-view">
+    
+    <!-- State A: Classic Google Home Screen (when starting) -->
+    <div id="google-home-view" class="google-home-view">
+      
+      <!-- Top header bar (Gmail, Images, Google apps, sign in) -->
+      <div class="g-home-header">
+        <a href="javascript:void(0)">Gmail</a>
+        <a href="javascript:void(0)">الصور</a>
+        <button type="button" class="g-apps-icon" title="تطبيقات Google">⠿</button>
+        <button type="button" class="g-signin-button">تسجيل الدخول</button>
+      </div>
+
+      <!-- Center Logo & Search Bar -->
+      <div class="g-home-center">
+        <div class="g-big-logo">
+          <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+        </div>
+
+        <div class="g-home-searchbox">
+          <svg class="g-search-lens" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" id="g-home-input" placeholder="ابحث في Google أو اكتب اسم الخبر أو الشخصية..." autocomplete="off">
+          
+          <div class="g-search-icons">
+            <button type="button" class="g-icon-btn" title="البحث الصوتي">
+              <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="m12 15c1.66 0 3-1.34 3-3v-6c0-1.66-1.34-3-3-3s-3 1.34-3 3v6c0 1.66 1.34 3 3 3z"/><path fill="#34A853" d="m11 18.92v2.08h2v-2.08c3.05-.48 5.4-3.03 5.4-6.92h-2c0 2.76-2.24 5-5 5s-5-2.24-5-5h-2c0 3.89 2.35 6.44 5.4 6.92z"/><path fill="#F4B400" d="m7 12h-2c0 1.93.78 3.68 2.05 4.95l1.41-1.41c-.9-.9-1.46-2.15-1.46-3.54z"/><path fill="#EA4335" d="m12 15c-1.66 0-3-1.34-3-3v-6c0-1.66 1.34-3 3-3s3 1.34 3 3v6c0 1.66-1.34 3-3 3z"/></svg>
+            </button>
+            <button type="button" class="g-icon-btn" title="البحث باستخدام العدسة">
+              <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path fill="#EA4335" d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="g-home-actions">
+          <button type="button" class="g-std-btn" onclick="triggerGoogleHomeSearch()">بحث Google</button>
+          <button type="button" class="g-std-btn" onclick="triggerLuckySearch()">ضربة حظ</button>
+        </div>
+
+        <!-- Instant Suggested Search Badges -->
+        <div class="g-quick-queries">
+          <span class="quick-title">أمثلة سريعة للأخبار المنشورة:</span>
+          <div class="quick-chips-list" id="home-quick-chips">
+            <!-- Dynamically populated from news list -->
+          </div>
+        </div>
+
+        <div class="g-languages-line">
+          Google متوفر باللغة: <a href="javascript:void(0)">English</a>
+        </div>
+      </div>
+
+      <!-- Google Minimalist Footer -->
+      <footer class="g-home-footer">
+        <div class="footer-region">مصر / الشرق الأوسط</div>
+        <div class="footer-links-grid">
+          <div class="footer-right-links">
+            <a href="javascript:void(0)">حول Google</a>
+            <a href="javascript:void(0)">الإعلانات</a>
+            <a href="javascript:void(0)">الأعمال</a>
+            <a href="javascript:void(0)">كيف يعمل بحث Google</a>
+          </div>
+          <div class="footer-left-links">
+            <a href="javascript:void(0)">الخصوصية</a>
+            <a href="javascript:void(0)">البنود</a>
+            <a href="javascript:void(0)">الإعدادات</a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+
+    <!-- State B: REAL GOOGLE SEARCH RESULTS PAGE (Identical to User's Screenshot) -->
+    <div id="google-results-view" class="google-results-view" style="display: none;">
+      
+      <!-- Authentic Google Results Top Bar -->
+      <header class="g-results-topbar">
+        <div class="g-topbar-right">
+          <!-- Small Google Logo -->
+          <div class="g-mini-logo" onclick="backToGoogleHome()" title="العودة للصفحة الرئيسية">
+            <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+          </div>
+
+          <!-- Real Search Bar with Clear, Keyboard, Mic, Lens, and AI Mode -->
+          <div class="g-results-searchbox">
+            <button type="button" class="btn-ai-mode" title="وضع AI التوليدي">
+              <span>وضع AI ✨</span>
+            </button>
+            <input type="text" id="g-results-input" autocomplete="off">
+            <button type="button" class="g-clear-query" id="btn-clear-serp" onclick="clearResultsInput()">✕</button>
+            <span class="g-divider"></span>
+            <button type="button" class="g-tool-icon" title="لوحة مفاتيح الشاشة">⌨️</button>
+            <button type="button" class="g-tool-icon" title="البحث الصوتي">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="m12 15c1.66 0 3-1.34 3-3v-6c0-1.66-1.34-3-3-3s-3 1.34-3 3v6c0 1.66 1.34 3 3 3z"/><path fill="#34A853" d="m11 18.92v2.08h2v-2.08c3.05-.48 5.4-3.03 5.4-6.92h-2c0 2.76-2.24 5-5 5s-5-2.24-5-5h-2c0 3.89 2.35 6.44 5.4 6.92z"/><path fill="#F4B400" d="m7 12h-2c0 1.93.78 3.68 2.05 4.95l1.41-1.41c-.9-.9-1.46-2.15-1.46-3.54z"/><path fill="#EA4335" d="m12 15c-1.66 0-3-1.34-3-3v-6c0-1.66 1.34-3 3-3s3 1.34 3 3v6c0 1.66-1.34 3-3 3z"/></svg>
+            </button>
+            <button type="button" class="g-tool-icon" onclick="triggerGoogleResultsSearch()" title="البحث">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#8ab4f8" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="g-topbar-left">
+          <button type="button" class="g-nav-icon" title="مشاركة">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+          </button>
+          <button type="button" class="g-nav-icon" title="تطبيقات Google">⠿</button>
+          <div class="g-profile-badge">H</div>
+        </div>
+      </header>
+
+      <!-- Google Results Navigation Tabs -->
+      <nav class="g-results-tabs-bar">
+        <div class="g-tabs-inner">
+          <a href="javascript:void(0)" class="tab-link active">الكل</a>
+          <a href="javascript:void(0)" class="tab-link">صور</a>
+          <a href="javascript:void(0)" class="tab-link">فيديوهات</a>
+          <a href="javascript:void(0)" class="tab-link">أخبار</a>
+          <a href="javascript:void(0)" class="tab-link">فيديوهات قصيرة</a>
+          <a href="javascript:void(0)" class="tab-link">الويب</a>
+          <a href="javascript:void(0)" class="tab-link">المزيد</a>
+          <span class="tab-link-tools">الأدوات</span>
+        </div>
+      </nav>
+
+      <!-- 2-Column Search Results Grid (Main Results + Side Knowledge Panel) -->
+      <main class="g-results-grid-layout">
+        
+        <!-- COLUMN 1: Search Results (Right in RTL) -->
+        <div class="g-main-results-col">
+          
+          <div class="g-stats-line" id="g-stats-line">
+            حوالي 4,320,000 نتيجة (0.22 ثانية)
+          </div>
+
+          <!-- Google "Top Stories" News Carousel (الأخبار الرئيسية) -->
+          <div class="g-top-stories-section" id="g-top-stories-section">
+            <div class="top-stories-title-row">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="news-flame-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              <h3>أهم الأخبار ذات الصلة</h3>
+            </div>
+            <div class="top-stories-cards-grid" id="top-stories-cards-grid">
+              <!-- Dynamically rendered Top Stories cards -->
+            </div>
+          </div>
+
+          <!-- The Client's #1 Ranking Result Card -->
+          <div id="client-rank-one-card" class="g-client-result-wrapper">
+            <!-- Dynamically populated with client's exact news! -->
+          </div>
+
+          <!-- Related Real News from Different Recognized Outlets -->
+          <div class="related-outlets-block">
+            <div class="outlets-section-header">
+              <span class="outlets-header-icon">📰</span>
+              <h4 class="outlets-heading">تغطيات ومقالات من مواقع إخبارية وصحفية أخرى</h4>
+            </div>
+
+            <!-- Dynamically rendered related news list from Youm7, Al Jazeera, Al Arabiya, Sky News, Wikipedia -->
+            <div class="dynamic-outlets-list" id="dynamic-outlets-list">
+            </div>
+
+          </div>
+
+          <!-- People Also Ask / عمليات بحث ذات صلة -->
+          <div class="g-related-searches">
+            <h4>عمليات بحث ذات صلة</h4>
+            <div class="related-queries-pills" id="related-queries-pills">
+              <!-- Dynamically generated tags -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMN 2: Google Knowledge Panel / بطاقة المعلومات (Left in RTL, exact like screenshot #2) -->
+        <aside class="g-knowledge-panel-col">
+          <div class="knowledge-card">
+            
+            <div class="kp-header">
+              <div class="kp-title-row">
+                <h2 class="kp-main-title" id="kp-title">حسن الجنيدي</h2>
+                <span class="kp-subtitle" id="kp-subtitle">رجل أعمال / شخصية عامة ومستثمر</span>
+              </div>
+              <span class="kp-share-icon" title="مشاركة">⋮</span>
+            </div>
+
+            <!-- Image Mosaic Grid (Just like real Google) -->
+            <div class="kp-photos-mosaic">
+              <div class="kp-photo-large">
+                <img id="kp-img-main" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="صورة رئيسية">
+              </div>
+              <div class="kp-photo-thumbs">
+                <img id="kp-img-sub1" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=300&q=80" alt="صورة ثانوية">
+                <img id="kp-img-sub2" src="https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=300&q=80" alt="صورة ثانوية">
+              </div>
+            </div>
+
+            <!-- Bio & Summary -->
+            <div class="kp-bio-body">
+              <p id="kp-bio-text">
+                شخصية رائدة في قطاع الأعمال والمشاريع الاستثمارية الحديثة، يمتلك سجلاً حافلاً في قيادة المبادرات التنموية والتطوير التجاري. تصدرت أخباره وإنجازاته كبرى المنصات الإخبارية نظراً لدوره الفاعل ومساهماته الاقتصادية البارزة.
+              </p>
+              <div class="kp-source-line">
+                المصدر: <a href="javascript:void(0)">شبكة أخبار الجنيدي والتقارير الصحفية الموثقة</a>
+              </div>
+            </div>
+
+            <!-- Metadata Key Details -->
+            <div class="kp-specs-list">
+              <div class="kp-spec-item">
+                <span class="spec-label">مجال النشاط:</span>
+                <span class="spec-value" id="kp-activity">ريادة الأعمال، التطوير والاستثمار</span>
+              </div>
+              <div class="kp-spec-item">
+                <span class="spec-label">الموقع الرسمي:</span>
+                <span class="spec-value"><a href="javascript:void(0)" onclick="switchMainTab('news')">elgnedynews.com</a></span>
+              </div>
+              <div class="kp-spec-item">
+                <span class="spec-label">حالة التوثيق:</span>
+                <span class="spec-value verified-text">✓ حساب ومحتوى موثق لدى محركات البحث</span>
+              </div>
+            </div>
+
+            <!-- Direct Action Button -->
+            <button type="button" class="kp-action-btn" onclick="openCurrentArticleInNews()">
+              <span>الانتقال لقراءة الخبر الكامل على الموقع ←</span>
+            </button>
+
+          </div>
+        </aside>
+
+      </main>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================================= -->
+  <!-- TAB 2: NEWS WEBSITE (CLEAN ARABIC EDITORIAL VIEW)                         -->
+  <!-- ========================================================================= -->
+  <section id="tab-news" class="main-tab-view">
+    
+    <!-- News Masthead Header -->
+    <header class="arabic-news-header">
+      <div class="news-container flex-between">
+        <div class="news-logo-group">
+          <span class="news-symbol">✦</span>
+          <div class="news-titles">
+            <span class="news-main-name">شبكة أخبار <span>الجنيدي</span></span>
+            <span class="news-sub-slogan">صحافة إلكترونية مستقلة • تغطية حصرية وتحليلات معمقة</span>
+          </div>
+        </div>
+        <div class="news-date-badge" id="current-arabic-date">
+          الثلاثاء، 20 أكتوبر 2026
+        </div>
+      </div>
+    </header>
+
+    <div class="news-container news-main-body">
+      
+      <!-- SUB-VIEW 1: Feed of All Published News Cards -->
+      <div id="feed-cards-view">
+        <div class="feed-title-bar">
+          <h2>أحدث الأخبار والتقارير المنشورة</h2>
+          <p>تصفح الأخبار الحصرية المحدثة لحظة بلحظة</p>
+        </div>
+
+        <div class="arabic-news-grid" id="arabic-news-grid">
+          <!-- Dynamically populated cards -->
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 2: Single Full News Article View -->
+      <div id="single-read-view" style="display: none;">
+        <button type="button" class="btn-back-to-feed" onclick="backToNewsFeed()">
+          → العودة لجميع الأخبار
+        </button>
+
+        <article class="full-article-paper">
+          <span class="article-cat-badge" id="single-cat">أخبار عامة</span>
+          <h1 class="article-headline-text" id="single-title">عنوان الخبر</h1>
+          
+          <div class="article-writer-row">
+            <span>بقلم: <strong>هيئة التحرير - شبكة الجنيدي</strong></span>
+            <span>•</span>
+            <span id="single-date">اليوم</span>
+            <span>•</span>
+            <span class="verified-indexed-badge">⚡ مؤرشف لدى جوجل في الترتيب #1</span>
+          </div>
+
+          <div class="article-hero-wrap">
+            <img id="single-image" src="" alt="صورة الخبر">
+          </div>
+
+          <div class="article-editorial-content" id="single-content">
+            <!-- Full Story Text -->
+          </div>
+
+          <!-- Bottom Banner: Jump to Google -->
+          <div class="article-jump-google-box">
+            <div>
+              <h4>هل تريد تجربة البحث عن هذا الخبر في جوجل؟</h4>
+              <p>شاهد كيف يتصدر هذا الخبر نتائج البحث الأولى بمجرد كتابة عنوانه.</p>
+            </div>
+            <button type="button" class="btn-jump-google" id="btn-jump-google-act">
+              🔍 ابحث عن هذا الخبر في جوجل الآن
+            </button>
+          </div>
+        </article>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================================= -->
+  <!-- TAB 3: ADMIN PANEL (EASY, BEAUTIFUL, ARABIC, ANIMATED)                   -->
+  <!-- ========================================================================= -->
+  <section id="tab-admin" class="main-tab-view">
+    
+    <div class="admin-wrapper">
+      
+      <!-- Friendly Admin Intro Banner with Stats -->
+      <div class="admin-welcome-banner">
+        <div class="welcome-text">
+          <h2>لوحة إدارة الأخبار السريعة</h2>
+          <p>أهلاً بك! اكتب عنوان الخبر وتفاصيله أدناه، ثم اضغط <strong>"نشر الخبر في الموقع وجوجل"</strong> ليظهر الخبر فوراً في الموقع ويتصدر نتيجة البحث الأولى في جوجل!</p>
+        </div>
+        
+        <!-- Live Quick Stats Badges -->
+        <div class="admin-quick-stats">
+          <div class="stat-bubble">
+            <span class="stat-num" id="stat-total-articles">3</span>
+            <span class="stat-name">أخبار منشورة</span>
+          </div>
+          <div class="stat-bubble highlight">
+            <span class="stat-num">#1</span>
+            <span class="stat-name">الترتيب في جوجل</span>
+          </div>
+          <div class="stat-bubble green">
+            <span class="stat-num">100%</span>
+            <span class="stat-name">جاهزية الأرشفة</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin 2 Columns (Add Form + Published List) -->
+      <div class="admin-panels-grid">
+        
+        <!-- Column 1: Add News Form Card -->
+        <div class="admin-panel-card">
+          <div class="panel-header">
+            <span class="header-icon">✍️</span>
+            <h3>إضافة خبر جديد</h3>
+          </div>
+
+          <form id="admin-publish-form" onsubmit="handleArabicPublish(event)">
+            
+            <!-- Quick Preset Helper Buttons for the Client -->
+            <div class="quick-sample-buttons">
+              <span class="sample-label">أمثلة جاهزة للضغط السريع:</span>
+              <button type="button" class="sample-btn" onclick="fillSampleNews('hassan')">✨ خبر عن حسن الجنيدي</button>
+              <button type="button" class="sample-btn" onclick="fillSampleNews('solar')">☀️ خبر عن الطاقة النظيفة</button>
+              <button type="button" class="sample-btn" onclick="fillSampleNews('sports')">⚽ خبر رياضي</button>
+            </div>
+
+            <!-- 1. Title -->
+            <div class="form-input-group">
+              <label for="input-title">
+                <strong>عنوان الخبر الرئيسي</strong> <span class="required-star">*</span>
+              </label>
+              <input type="text" id="input-title" class="custom-input title-input" placeholder="اكتب عنوان الخبر هنا (مثال: حسن الجنيدي يفتتح أحدث مشاريعه الاستثمارية)..." required>
+              <span class="input-subnote">نصيحة: اكتب الاسم أو الكلمات التي سيبحث عنها الناس في جوجل.</span>
+            </div>
+
+            <!-- 2. Category -->
+            <div class="form-input-group">
+              <label for="input-category"><strong>تصنيف الخبر</strong></label>
+              <select id="input-category" class="custom-input">
+                <option value="أخبار عامة وحصرية" selected>أخبار عامة وحصرية</option>
+                <option value="اقتصاد وأعمال">اقتصاد وأعمال</option>
+                <option value="طاقة وتكنولوجيا">طاقة وتكنولوجيا</option>
+                <option value="رياضة محلية وعالمية">رياضة محلية وعالمية</option>
+                <option value="مجتمع وتنمية">مجتمع وتنمية</option>
+              </select>
+            </div>
+
+            <!-- 3. Photo Selection (Visual One-Click Buttons) -->
+            <div class="form-input-group">
+              <label><strong>اختر صورة مناسبة للخبر:</strong></label>
+              <div class="visual-photo-selector">
+                <button type="button" class="photo-btn active" onclick="selectVisualPhoto('business', this)">
+                  👔 رجل أعمال / شخصية
+                </button>
+                <button type="button" class="photo-btn" onclick="selectVisualPhoto('project', this)">
+                  🏢 مشروع / مبنى حديث
+                </button>
+                <button type="button" class="photo-btn" onclick="selectVisualPhoto('energy', this)">
+                  ☀️ طاقة واستثمار
+                </button>
+                <button type="button" class="photo-btn" onclick="selectVisualPhoto('stadium', this)">
+                  ⚽ رياضة وملاعب
+                </button>
+              </div>
+              <input type="url" id="input-image-url" class="custom-input ltr-input" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80">
+            </div>
+
+            <!-- 4. Story Details -->
+            <div class="form-input-group">
+              <label for="input-body">
+                <strong>تفاصيل الخبر ومحتواه</strong> <span class="required-star">*</span>
+              </label>
+              <textarea id="input-body" rows="5" class="custom-input" placeholder="اكتب تفاصيل القصة والخبر هنا..." required>أعلنت مصادر مسؤولة اليوم عن تدشين حزمة مشاريع جديدة تهدف إلى تعزيز النشاط الاقتصادي وتوفير فرص استثمارية نوعية للشباب، وسط اهتمام إعلامي واسع وتغطية متكاملة للحدث.</textarea>
+            </div>
+
+            <!-- Big Easy Action Button -->
+            <button type="submit" class="btn-submit-glow">
+              <span>🚀 نشر الخبر الآن ومزامنته مع جوجل</span>
+            </button>
+          </form>
+
+        </div>
+
+        <!-- Column 2: Published Articles List & Direct Google Test -->
+        <div class="admin-panel-card">
+          <div class="panel-header flex-between">
+            <div class="flex-align">
+              <span class="header-icon">📑</span>
+              <h3>الأخبار المنشورة في الموقع (<span id="admin-badge-count">3</span>)</h3>
+            </div>
+            <button type="button" class="btn-restore-samples" onclick="restoreDefaultArticles()" title="استعادة الأخبار التلقائية">
+              استعادة الأمثلة
+            </button>
+          </div>
+          
+          <p class="panel-hint">
+            اضغط على زر <strong>"🔍 شاهد في جوجل"</strong> بجانب أي خبر لتشاهد تصدره فوراً في محرك بحث جوجل!
+          </p>
+
+          <div class="published-articles-stack" id="published-articles-stack">
+            <!-- Dynamically populated news cards -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
