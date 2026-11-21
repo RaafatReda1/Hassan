@@ -1,26 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+* {
+  font-family: "Tajawal", -apple-system, sans-serif;
+  font-style: normal;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafbfc;
+  --foreground: #090e17;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --accent: #047857;
+  --accent-soft: #ecfdf5;
+  --accent-text: #065f46;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #050811;
+  --foreground: #f8fafc;
+  --card-bg: #0b1120;
+  --card-border: #17233a;
+  --accent: #10b981;
+  --accent-soft: rgba(16, 185, 129, 0.12);
+  --accent-text: #34d399;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+@keyframes luxuryFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-luxury-fade {
+  animation: luxuryFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
